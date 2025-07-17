@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>School Notes</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const chapters = {
+      
+      std9: {
+        science_1: ["1: Laws of Motion"],
+
+      },
+      std10: {
+        science_1: [
+          "1: Gravitation" ]
+
+      }
+    };
+
+    function updateChapters() {
+      const std = document.getElementById("std").value;
+      const subject = document.getElementById("subject").value;
+      const chapterSelect = document.getElementById("chapter");
+      chapterSelect.innerHTML = '<option value="">--Choose Chapter--</option>';
+
+      if (std && subject) {
+        const chapList = chapters[std][subject];
+        chapList.forEach((chap, i) => {
+          const option = document.createElement("option");
+          option.value = `chapter${i + 1}`; // filename: chapter1.pdf, etc.
+          option.text = chap;
+          chapterSelect.appendChild(option);
+        });
+      }
+
+      document.getElementById("links").style.display = "none";
+    }
+
+    function showLink() {
+      const std = document.getElementById("std").value;
+      const subject = document.getElementById("subject").value;
+      const chapter = document.getElementById("chapter").value;
+      const viewLink = document.getElementById("viewLink");
+      const downloadLink = document.getElementById("downloadLink");
+      const links = document.getElementById("links");
+
+      if (std && subject && chapter) {
+        const filePath = `notes/${std}/${subject}/${chapter}.pdf`;
+        viewLink.href = filePath;
+        downloadLink.href = filePath;
+
+        downloadLink.innerText = `⬇️ Download ${chapter.replace('chapter', 'Chapter ')} PDF`;
+        links.style.display = "block";
+      } else {
+        links.style.display = "none";
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Welcome to My Notes Website</h1>
+
+  <label for="std">Select Class:</label>
+  <select id="std" onchange="updateChapters(); showLink();">
+    <option value="">--Choose Class--</option>
+    <option value="std9">Std 9</option>
+    <option value="std10">Std 10</option>
+  </select>
+
+  <label for="subject">Select Subject:</label>
+  <select id="subject" onchange="updateChapters(); showLink();">
+    <option value="">--Choose Subject--</option>
+    <option value="science_1">Science_1</option>
+  </select>
+
+  <label for="chapter">Select Chapter:</label>
+  <select id="chapter" onchange="showLink()">
+    <option value="">--Choose Chapter--</option>
+  </select>
+
+  <p id="links" style="display:none;">
+    <a id="viewLink" href="#" target="_blank">📖 View PDF</a> |
+    <a id="downloadLink" href="#" download>⬇️ Download PDF</a>
+  </p>
+</body>
+</html>
